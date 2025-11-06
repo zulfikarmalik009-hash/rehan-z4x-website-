@@ -1,64 +1,77 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vehicle Info - Rehan Z4X</title>
+  <title>वाहन जानकारी - Rehan Z4X</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-color: #0f0f0f;
       --text-color: #ffffff;
-      --card-bg: #1c1c1c;
+      --card-bg: rgba(255, 255, 255, 0.05);
       --button-bg: #ff3b3b;
+      --highlight-color: #ff8800;
     }
 
     body.light {
-      --bg-color: #ffffff;
-      --text-color: #000000;
-      --card-bg: #f5f5f5;
+      --bg-color: #f2f2f2;
+      --text-color: #111111;
+      --card-bg: #ffffff;
       --button-bg: #007bff;
+      --highlight-color: #ff8800;
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      font-family: "Poppins", sans-serif;
       margin: 0;
-      padding: 0;
-      text-align: center;
-      transition: background 0.3s, color 0.3s;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+      color: var(--text-color);
+      transition: 0.3s all;
     }
 
     header {
-      padding: 20px;
+      padding: 40px 20px 60px 20px;
       background: linear-gradient(135deg, #ff3b3b, #ff8800);
-      border-bottom-left-radius: 25px;
-      border-bottom-right-radius: 25px;
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
 
     header img {
-      width: 130px;
-      height: 130px;
+      width: 180px;
+      height: 180px;
       border-radius: 50%;
-      border: 3px solid #fff;
-      margin-top: 10px;
+      border: 5px solid #fff;
+      margin-top: -30px;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.5);
+      transition: 0.3s all;
     }
 
     .insta {
       display: flex;
-      justify-content: center;
       align-items: center;
-      gap: 8px;
-      font-size: 18px;
-      margin-top: 10px;
+      gap: 10px;
+      margin-top: 15px;
+      font-weight: 600;
       color: #fff;
       text-decoration: none;
+      font-size: 20px;
+      transition: 0.2s;
     }
 
     .insta img {
-      width: 22px;
-      height: 22px;
+      width: 26px;
+      height: 26px;
+    }
+
+    .insta:hover {
+      opacity: 0.85;
     }
 
     .toggle {
@@ -67,73 +80,109 @@
       right: 20px;
       background: var(--button-bg);
       border: none;
-      border-radius: 20px;
-      padding: 8px 14px;
+      border-radius: 25px;
+      padding: 10px 16px;
       color: #fff;
       cursor: pointer;
       font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: 0.3s;
+    }
+
+    .toggle:hover {
+      opacity: 0.85;
     }
 
     main {
-      padding: 30px 20px;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: var(--highlight-color);
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
     }
 
     input {
-      padding: 10px;
-      width: 260px;
+      padding: 12px 15px;
+      width: 280px;
       border: 2px solid var(--button-bg);
-      border-radius: 10px;
+      border-radius: 15px;
       font-size: 16px;
       outline: none;
-      background: transparent;
+      background: rgba(255,255,255,0.05);
       color: var(--text-color);
-    }
-
-    button {
-      padding: 10px 16px;
-      margin-left: 10px;
-      background: var(--button-bg);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 16px;
       transition: 0.2s;
     }
 
+    input:focus {
+      border-color: var(--highlight-color);
+      box-shadow: 0 0 8px var(--highlight-color);
+    }
+
+    button {
+      padding: 12px 18px;
+      margin-left: 10px;
+      background: var(--button-bg);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
     button:hover {
-      opacity: 0.8;
+      opacity: 0.85;
+      transform: translateY(-2px);
     }
 
     .result {
       background: var(--card-bg);
       margin-top: 30px;
-      padding: 20px;
-      border-radius: 12px;
+      padding: 25px;
+      border-radius: 20px;
       text-align: left;
-      width: 90%;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 650px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      font-size: 16px;
+      line-height: 1.6;
+      transition: 0.3s all;
+    }
+
+    .result b {
+      color: var(--highlight-color);
     }
 
     .copy-btn {
       display: block;
-      margin: 15px auto 0;
-      padding: 8px 14px;
+      margin: 20px auto 0;
+      padding: 10px 20px;
       background: var(--button-bg);
       border: none;
       color: #fff;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+
+    .copy-btn:hover {
+      opacity: 0.85;
+      transform: translateY(-2px);
     }
 
     .credit {
       text-align: center;
       font-size: 14px;
-      margin-top: 10px;
-      opacity: 0.8;
+      margin-top: 30px;
+      opacity: 0.7;
     }
 
   </style>
@@ -143,17 +192,21 @@
     <button class="toggle" onclick="toggleTheme()">🌙 / ☀️</button>
     <img src="https://i.ibb.co/FbpgNfbZ/Screenshot-20250923-145058-edit-226003820134146.jpg" alt="Rehan Z4X">
     <a href="https://instagram.com/rehan_z4x" target="_blank" class="insta">
-      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="insta"> @rehan_z4x
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"> इंस्टाग्राम: @rehan_z4x
     </a>
   </header>
 
   <main>
-    <h2>Check Vehicle Information</h2>
-    <input type="text" id="rcInput" placeholder="Enter Vehicle Number..." />
-    <button onclick="fetchVehicle()">Search</button>
+    <h2>वाहन जानकारी देखें</h2>
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px;">
+      <input type="text" id="rcInput" placeholder="वाहन नंबर डालें..." />
+      <button onclick="fetchVehicle()">खोजें</button>
+    </div>
 
     <div id="result" class="result" style="display:none;"></div>
   </main>
+
+  <div class="credit">© 2025 Rehan Z4X</div>
 
   <script>
     const API_URL = "https://rehan-vehicle-rc-info.vercel.app/";
@@ -163,12 +216,12 @@
       const resultDiv = document.getElementById("result");
 
       if (!rc) {
-        alert("Please enter a vehicle number!");
+        alert("कृपया वाहन नंबर डालें!");
         return;
       }
 
       resultDiv.style.display = "block";
-      resultDiv.innerHTML = "⏳ Fetching details...";
+      resultDiv.innerHTML = "⏳ जानकारी लायी जा रही है...";
 
       try {
         const res = await fetch(`${API_URL}?rc_number=${rc}`);
@@ -179,21 +232,21 @@
           return;
         }
 
-        let html = `<strong>Developer: rehan_z4x</strong><br><br>`;
+        let html = `<strong style="color: var(--highlight-color); font-size:18px;">डेवलपर: rehan_z4x</strong><br><br>`;
         for (const [key, value] of Object.entries(data.details)) {
           if (value) html += `<b>${key}:</b> ${value}<br>`;
         }
 
-        resultDiv.innerHTML = html + `<button class="copy-btn" onclick="copyInfo()">📋 Copy Info</button>`;
+        resultDiv.innerHTML = html + `<button class="copy-btn" onclick="copyInfo()">📋 जानकारी कॉपी करें</button>`;
       } catch (e) {
-        resultDiv.innerHTML = `<p style='color:red;'>⚠️ Error fetching data.</p>`;
+        resultDiv.innerHTML = `<p style='color:red;'>⚠️ जानकारी लाने में त्रुटि।</p>`;
       }
     }
 
     function copyInfo() {
       const text = document.getElementById("result").innerText;
       navigator.clipboard.writeText(text);
-      alert("✅ Vehicle info copied!");
+      alert("✅ जानकारी कॉपी कर दी गई है!");
     }
 
     function toggleTheme() {
