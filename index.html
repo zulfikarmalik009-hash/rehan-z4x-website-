@@ -3,207 +3,201 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rehan_z4x Vehicle Info</title>
+  <title>Vehicle Info - Rehan Z4X</title>
   <style>
     :root {
-      --bg-color: #0d1117;
+      --bg-color: #0f0f0f;
       --text-color: #ffffff;
-      --card-bg: #161b22;
-      --accent: #00bcd4;
+      --card-bg: #1c1c1c;
+      --button-bg: #ff3b3b;
     }
-    [data-theme="light"] {
-      --bg-color: #f4f4f9;
-      --text-color: #111;
-      --card-bg: #ffffff;
-      --accent: #0077ff;
+
+    body.light {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --card-bg: #f5f5f5;
+      --button-bg: #007bff;
     }
+
     body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
-      transition: all 0.4s ease;
-    }
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 15px 25px;
-      background-color: var(--card-bg);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    header h1 {
-      font-size: 20px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--accent);
-    }
-    .theme-toggle {
-      cursor: pointer;
-      border: none;
-      background: var(--accent);
-      color: #fff;
-      padding: 6px 12px;
-      border-radius: 20px;
-      transition: 0.3s;
-    }
-    .theme-toggle:hover { opacity: 0.8; }
-
-    .banner {
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      padding: 0;
       text-align: center;
-      padding: 30px 10px;
+      transition: background 0.3s, color 0.3s;
     }
-    .banner img {
+
+    header {
+      padding: 20px;
+      background: linear-gradient(135deg, #ff3b3b, #ff8800);
+      border-bottom-left-radius: 25px;
+      border-bottom-right-radius: 25px;
+      position: relative;
+    }
+
+    header img {
       width: 130px;
       height: 130px;
       border-radius: 50%;
-      border: 3px solid var(--accent);
-      object-fit: cover;
-      box-shadow: 0 0 20px var(--accent);
-    }
-    .banner h2 {
+      border: 3px solid #fff;
       margin-top: 10px;
-      color: var(--accent);
-      font-size: 18px;
-    }
-    .banner h2 a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-    .banner h2 a:hover {
-      text-decoration: underline;
     }
 
-    .search-box {
+    .insta {
       display: flex;
       justify-content: center;
-      margin: 20px;
-      gap: 10px;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      margin-top: 10px;
+      color: #fff;
+      text-decoration: none;
     }
+
+    .insta img {
+      width: 22px;
+      height: 22px;
+    }
+
+    .toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--button-bg);
+      border: none;
+      border-radius: 20px;
+      padding: 8px 14px;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    main {
+      padding: 30px 20px;
+    }
+
     input {
-      width: 250px;
       padding: 10px;
-      border-radius: 8px;
-      border: 1px solid var(--accent);
-      background: var(--card-bg);
+      width: 260px;
+      border: 2px solid var(--button-bg);
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+      background: transparent;
       color: var(--text-color);
     }
+
     button {
-      background: var(--accent);
-      color: #fff;
+      padding: 10px 16px;
+      margin-left: 10px;
+      background: var(--button-bg);
+      color: white;
       border: none;
-      padding: 10px 15px;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: 0.3s;
+      font-size: 16px;
+      transition: 0.2s;
     }
+
     button:hover {
-      opacity: 0.9;
+      opacity: 0.8;
     }
 
     .result {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 20px;
-    }
-    .card {
-      background-color: var(--card-bg);
+      background: var(--card-bg);
+      margin-top: 30px;
       padding: 20px;
-      border-radius: 16px;
-      max-width: 500px;
+      border-radius: 12px;
+      text-align: left;
       width: 90%;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-      animation: fadeIn 0.5s ease;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    .copy-btn {
+      display: block;
+      margin: 15px auto 0;
+      padding: 8px 14px;
+      background: var(--button-bg);
+      border: none;
+      color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
     }
-    .card h3 {
-      color: var(--accent);
+
+    .credit {
       text-align: center;
-      margin-bottom: 10px;
-    }
-    .detail {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding: 5px 0;
-    }
-    .detail span { font-weight: 500; }
-    footer {
-      text-align: center;
-      margin: 30px 0 15px;
       font-size: 14px;
-      opacity: 0.7;
+      margin-top: 10px;
+      opacity: 0.8;
     }
+
   </style>
 </head>
-<body data-theme="dark">
-
+<body>
   <header>
-    <h1>⚙️ rehan_z4x</h1>
-    <button class="theme-toggle" onclick="toggleTheme()">🌙 Light</button>
+    <button class="toggle" onclick="toggleTheme()">🌙 / ☀️</button>
+    <img src="https://i.ibb.co/FbpgNfbZ/Screenshot-20250923-145058-edit-226003820134146.jpg" alt="Rehan Z4X">
+    <a href="https://instagram.com/rehan_z4x" target="_blank" class="insta">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="insta"> @rehan_z4x
+    </a>
   </header>
 
-  <section class="banner">
-    <img src="https://i.ibb.co/FbpgNfbZ/Screenshot-20250923-145058-edit-226003820134146.jpg" alt="Rehan">
-    <h2>📸 <a href="https://instagram.com/rehan_z4x" target="_blank">@rehan_z4x</a></h2>
-  </section>
+  <main>
+    <h2>Check Vehicle Information</h2>
+    <input type="text" id="rcInput" placeholder="Enter Vehicle Number..." />
+    <button onclick="fetchVehicle()">Search</button>
 
-  <div class="search-box">
-    <input type="text" id="rcInput" placeholder="Enter Vehicle Number (e.g. UP14AB1234)">
-    <button onclick="getInfo()">Check Info</button>
-  </div>
-
-  <div class="result" id="result"></div>
-
-  <footer>© 2025 Developed by rehan_z4x</footer>
+    <div id="result" class="result" style="display:none;"></div>
+  </main>
 
   <script>
-    const apiBase = "https://rehan-vehicle-rc-info.vercel.app";
-    const resultBox = document.getElementById("result");
+    const API_URL = "https://rehan-vehicle-rc-info.vercel.app/";
 
-    async function getInfo() {
+    async function fetchVehicle() {
       const rc = document.getElementById("rcInput").value.trim();
+      const resultDiv = document.getElementById("result");
+
       if (!rc) {
         alert("Please enter a vehicle number!");
         return;
       }
-      resultBox.innerHTML = "<p>Fetching details...</p>";
+
+      resultDiv.style.display = "block";
+      resultDiv.innerHTML = "⏳ Fetching details...";
 
       try {
-        const res = await fetch(`${apiBase}/?rc_number=${encodeURIComponent(rc)}`);
+        const res = await fetch(`${API_URL}?rc_number=${rc}`);
         const data = await res.json();
 
-        if (data.status === "success") {
-          const details = Object.entries(data.details)
-            .filter(([key, val]) => val)
-            .map(([key, val]) => `<div class='detail'><span>${key}</span><span>${val}</span></div>`)
-            .join("");
-
-          resultBox.innerHTML = `
-            <div class="card">
-              <h3>Vehicle Info for ${data.rc_number}</h3>
-              ${details}
-            </div>
-          `;
-        } else {
-          resultBox.innerHTML = `<div class="card"><p>${data.message}</p></div>`;
+        if (data.status !== "success") {
+          resultDiv.innerHTML = `<p style='color:red;'>❌ ${data.message}</p>`;
+          return;
         }
-      } catch (err) {
-        resultBox.innerHTML = `<div class="card"><p>Error fetching data. Try again later.</p></div>`;
+
+        let html = `<strong>Developer: rehan_z4x</strong><br><br>`;
+        for (const [key, value] of Object.entries(data.details)) {
+          if (value) html += `<b>${key}:</b> ${value}<br>`;
+        }
+
+        resultDiv.innerHTML = html + `<button class="copy-btn" onclick="copyInfo()">📋 Copy Info</button>`;
+      } catch (e) {
+        resultDiv.innerHTML = `<p style='color:red;'>⚠️ Error fetching data.</p>`;
       }
     }
 
+    function copyInfo() {
+      const text = document.getElementById("result").innerText;
+      navigator.clipboard.writeText(text);
+      alert("✅ Vehicle info copied!");
+    }
+
     function toggleTheme() {
-      const body = document.body;
-      const current = body.getAttribute("data-theme");
-      const newTheme = current === "dark" ? "light" : "dark";
-      body.setAttribute("data-theme", newTheme);
-      document.querySelector(".theme-toggle").innerText = newTheme === "dark" ? "🌙 Light" : "🌞 Dark";
+      document.body.classList.toggle("light");
     }
   </script>
 </body>
