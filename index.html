@@ -23,12 +23,37 @@
       --highlight-color: #ff8800;
     }
 
+    /* Animated Gradient + Fullscreen Neon Particles */
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
       color: var(--text-color);
       transition: 0.3s all;
+      overflow: hidden;
+
+      background: linear-gradient(-45deg, #ff3b3b, #ff8800, #1a1a1a, #0f0f0f);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      position: relative;
+      z-index: 0;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      25% { background-position: 50% 100%; }
+      50% { background-position: 100% 50%; }
+      75% { background-position: 50% 0%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    canvas#particlesCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
     }
 
     header {
@@ -41,6 +66,7 @@
       flex-direction: column;
       align-items: center;
       box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      z-index: 1;
     }
 
     header img {
@@ -99,6 +125,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      z-index: 1;
+      position: relative;
     }
 
     h2 {
@@ -183,11 +211,15 @@
       font-size: 14px;
       margin-top: 30px;
       opacity: 0.7;
+      z-index: 1;
+      position: relative;
     }
-
   </style>
 </head>
 <body>
+  <!-- Particle Canvas -->
+  <canvas id="particlesCanvas"></canvas>
+
   <header>
     <button class="toggle" onclick="toggleTheme()">🌙 / ☀️</button>
     <img src="https://i.ibb.co/FbpgNfbZ/Screenshot-20250923-145058-edit-226003820134146.jpg" alt="Rehan Z4X">
@@ -252,6 +284,73 @@
     function toggleTheme() {
       document.body.classList.toggle("light");
     }
+
+    // Neon Glow Interactive Particles
+    const canvas = document.getElementById('particlesCanvas');
+    const ctx = canvas.getContext('2d');
+    let particlesArray = [];
+    const colors = ['#ff3b3b', '#ff8800', '#ffffff', '#ff00ff', '#00ffff'];
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initParticles();
+    });
+
+    const mouse = { x: null, y: null };
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.x;
+      mouse.y = e.y;
+    });
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 5 + 2;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.speedX = Math.random() * 1.5 - 0.75;
+        this.speedY = Math.random() * 1.5 - 0.75;
+      }
+
+      draw() {
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 15;
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+        ctx.fill();
+      }
+
+      update() {
+        this.x += this.speedX + (mouse.x - this.x) * 0.0015;
+        this.y += this.speedY + (mouse.y - this.y) * 0.0015;
+
+        if(this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if(this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+    }
+
+    function initParticles() {
+      particlesArray = [];
+      for(let i=0;i<200;i++){ // Increased particle density
+        particlesArray.push(new Particle());
+      }
+    }
+    initParticles();
+
+    function animate() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      particlesArray.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
   </script>
 </body>
 </html>
