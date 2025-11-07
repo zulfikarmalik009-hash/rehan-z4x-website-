@@ -1,356 +1,253 @@
-
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>वाहन जानकारी - Rehan Z4X</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-color: #0f0f0f;
-      --text-color: #ffffff;
-      --card-bg: rgba(255, 255, 255, 0.05);
-      --button-bg: #ff3b3b;
-      --highlight-color: #ff8800;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>वाहन जानकारी - Rehan Z4X</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#030305;
+  --accent:#00ff9f;
+  --accent-2:#00d8ff;
+  --glass: rgba(255,255,255,0.06);
+  --glass-2: rgba(0,0,0,0.4);
+  --terminal-bg: rgba(0,0,0,0.55);
+  --card-width: min(920px, 92%);
+  --matrix-speed: 3;
+  --glow: 20px;
+  --font-sans: 'Poppins', system-ui, sans-serif;
+  --button-bg: #ff3b3b;
+  --highlight-color: #ff8800;
+  --text-color: #ffffff;
+  --neon-header: #00ff9f;
+  --neon-card: #ff00ff;
+}
 
-    body.light {
-      --bg-color: #f2f2f2;
-      --text-color: #111111;
-      --card-bg: #ffffff;
-      --button-bg: #007bff;
-      --highlight-color: #ff8800;
-    }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:var(--font-sans);color:var(--text-color);}
+body{background:var(--bg);transition:0.4s all;}
 
-    /* Animated Gradient + Fullscreen Neon Particles */
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      color: var(--text-color);
-      transition: 0.3s all;
-      overflow: hidden;
+#matrix, canvas#particlesCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
 
-      background: linear-gradient(-45deg, #ff3b3b, #ff8800, #1a1a1a, #0f0f0f);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      position: relative;
-      z-index: 0;
-    }
+header{
+  padding:50px 20px 70px 20px;
+  display:flex;flex-direction:column;align-items:center;position:relative;z-index:5;
+  text-align:center;
+  animation: neonGlow 2.5s ease-in-out infinite alternate;
+}
+header img{
+  width:180px;height:180px;border-radius:50%;border:5px solid #fff;margin-top:-30px;
+  box-shadow:0 0 30px var(--neon-header), 0 0 50px var(--neon-header);
+  transition:0.3s all;
+  animation: pulseGlow 3s infinite alternate;
+}
+.insta{display:flex;align-items:center;gap:10px;margin-top:15px;font-weight:600;color:var(--text-color);text-decoration:none;font-size:20px;transition:0.2s;}
+.insta img{width:26px;height:26px;}
+.insta:hover{opacity:0.85;}
+.toggle{position:absolute;top:20px;right:20px;background:var(--button-bg);border:none;border-radius:25px;padding:10px 16px;color:#fff;cursor:pointer;font-weight:bold;font-size:16px;box-shadow:0 0 20px var(--neon-header);transition:0.3s;}
+.toggle:hover{opacity:0.85;}
 
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      25% { background-position: 50% 100%; }
-      50% { background-position: 100% 50%; }
-      75% { background-position: 50% 0%; }
-      100% { background-position: 0% 50%; }
-    }
+main{
+  position:relative;z-index:5;
+  display:flex;flex-direction:column;align-items:center;padding:40px 20px;
+}
 
-    canvas#particlesCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: -1;
-    }
+h2{
+  font-size:28px;margin-bottom:20px;color:var(--highlight-color);
+  text-shadow: 0 0 10px var(--highlight-color), 0 0 20px var(--highlight-color);
+  animation: flicker 3s linear infinite;
+}
 
-    header {
-      padding: 40px 20px 60px 20px;
-      background: linear-gradient(135deg, #ff3b3b, #ff8800);
-      border-bottom-left-radius: 40px;
-      border-bottom-right-radius: 40px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      z-index: 1;
-    }
+input{
+  padding:12px 15px;width:280px;border:2px solid var(--button-bg);border-radius:15px;font-size:16px;background:rgba(255,255,255,0.05);color:var(--text-color);outline:none;transition:0.3s;
+}
+input:focus{
+  border-color:var(--highlight-color);
+  box-shadow:0 0 12px var(--highlight-color);
+}
 
-    header img {
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      border: 5px solid #fff;
-      margin-top: -30px;
-      box-shadow: 0 8px 15px rgba(0,0,0,0.5);
-      transition: 0.3s all;
-    }
+button{
+  padding:12px 18px;margin-left:10px;background:var(--button-bg);color:#fff;border:none;border-radius:12px;cursor:pointer;font-size:16px;transition:0.3s;
+  box-shadow:0 0 10px var(--highlight-color);
+}
+button:hover{opacity:0.85;transform:translateY(-2px);}
 
-    .insta {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 15px;
-      font-weight: 600;
-      color: #fff;
-      text-decoration: none;
-      font-size: 20px;
-      transition: 0.2s;
-    }
+.result{
+  background:rgba(0,0,0,0.6);margin-top:30px;padding:25px;border-radius:20px;text-align:left;width:100%;max-width:650px;
+  box-shadow:0 0 20px var(--neon-card), 0 0 35px var(--neon-card);
+  font-size:16px;line-height:1.6;transition:0.4s all;animation: neonCardPulse 3s infinite alternate;
+}
+.result b{color:var(--highlight-color);}
+.copy-btn{display:block;margin:20px auto 0;padding:10px 20px;background:var(--button-bg);border:none;color:#fff;border-radius:12px;cursor:pointer;font-size:16px;transition:0.3s;box-shadow:0 0 15px var(--neon-card);}
+.copy-btn:hover{opacity:0.85;transform:translateY(-2px);}
 
-    .insta img {
-      width: 26px;
-      height: 26px;
-    }
+.credit{text-align:center;font-size:14px;margin-top:30px;opacity:0.7;position:relative;z-index:5;}
 
-    .insta:hover {
-      opacity: 0.85;
-    }
+/* Terminal overlay */
+.terminal{
+  position:fixed;right:20px;bottom:20px;width:360px;background:rgba(0,0,0,0.55);border-radius:12px;padding:16px;
+  box-shadow:0 0 20px var(--neon-header),0 10px 40px rgba(0,0,0,0.55);
+  color:var(--accent);font-family:"Courier New", monospace;font-size:13px;z-index:5;
+}
+.term-top{display:flex;gap:8px;align-items:center;}
+.circles{display:flex;gap:8px;}
+.c{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.08);}
+.c.red{background:linear-gradient(180deg,#ff6b6b,#ff3b3b);}
+.c.yellow{background:linear-gradient(180deg,#ffd57a,#ffba00);}
+.c.green{background:linear-gradient(180deg,#7ef8a5,#2fd26b);}
+.term-body{overflow:auto;flex:1;padding-right:6px;}
+.typing{color:var(--accent);white-space:pre-wrap;line-height:1.5;}
 
-    .toggle {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: var(--button-bg);
-      border: none;
-      border-radius: 25px;
-      padding: 10px 16px;
-      color: #fff;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 16px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      transition: 0.3s;
-    }
-
-    .toggle:hover {
-      opacity: 0.85;
-    }
-
-    main {
-      padding: 40px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      z-index: 1;
-      position: relative;
-    }
-
-    h2 {
-      font-size: 28px;
-      margin-bottom: 20px;
-      color: var(--highlight-color);
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
-    }
-
-    input {
-      padding: 12px 15px;
-      width: 280px;
-      border: 2px solid var(--button-bg);
-      border-radius: 15px;
-      font-size: 16px;
-      outline: none;
-      background: rgba(255,255,255,0.05);
-      color: var(--text-color);
-      transition: 0.2s;
-    }
-
-    input:focus {
-      border-color: var(--highlight-color);
-      box-shadow: 0 0 8px var(--highlight-color);
-    }
-
-    button {
-      padding: 12px 18px;
-      margin-left: 10px;
-      background: var(--button-bg);
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      opacity: 0.85;
-      transform: translateY(-2px);
-    }
-
-    .result {
-      background: var(--card-bg);
-      margin-top: 30px;
-      padding: 25px;
-      border-radius: 20px;
-      text-align: left;
-      width: 100%;
-      max-width: 650px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-      font-size: 16px;
-      line-height: 1.6;
-      transition: 0.3s all;
-    }
-
-    .result b {
-      color: var(--highlight-color);
-    }
-
-    .copy-btn {
-      display: block;
-      margin: 20px auto 0;
-      padding: 10px 20px;
-      background: var(--button-bg);
-      border: none;
-      color: #fff;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: 0.2s;
-    }
-
-    .copy-btn:hover {
-      opacity: 0.85;
-      transform: translateY(-2px);
-    }
-
-    .credit {
-      text-align: center;
-      font-size: 14px;
-      margin-top: 30px;
-      opacity: 0.7;
-      z-index: 1;
-      position: relative;
-    }
-  </style>
+/* Animations */
+@keyframes flicker{
+  0%,19%,21%,23%,25%,54%,56%,100%{text-shadow:0 0 8px var(--highlight-color),0 0 18px var(--highlight-color);}
+  20%,22%,24%,55%{text-shadow:none;}
+}
+@keyframes neonGlow{
+  0%{text-shadow:0 0 8px var(--neon-header);}
+  50%{text-shadow:0 0 20px var(--neon-header);}
+  100%{text-shadow:0 0 8px var(--neon-header);}
+}
+@keyframes pulseGlow{
+  0%{box-shadow:0 0 20px var(--neon-header),0 0 35px var(--neon-header);}
+  50%{box-shadow:0 0 35px var(--neon-header),0 0 55px var(--neon-header);}
+  100%{box-shadow:0 0 20px var(--neon-header),0 0 35px var(--neon-header);}
+}
+@keyframes neonCardPulse{
+  0%{box-shadow:0 0 20px var(--neon-card),0 0 35px var(--neon-card);}
+  50%{box-shadow:0 0 35px var(--neon-card),0 0 50px var(--neon-card);}
+  100%{box-shadow:0 0 20px var(--neon-card),0 0 35px var(--neon-card);}
+}
+</style>
 </head>
 <body>
-  <!-- Particle Canvas -->
-  <canvas id="particlesCanvas"></canvas>
+<canvas id="matrix"></canvas>
+<canvas id="particlesCanvas"></canvas>
 
-  <header>
-    <button class="toggle" onclick="toggleTheme()">🌙 / ☀️</button>
-    <img src="https://i.ibb.co/FbpgNfbZ/Screenshot-20250923-145058-edit-226003820134146.jpg" alt="Rehan Z4X">
-    <a href="https://instagram.com/rehan_z4x" target="_blank" class="insta">
-      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"> इंस्टाग्राम: @rehan_z4x
-    </a>
-  </header>
+<header>
+  <button class="toggle" onclick="toggleTheme()">🌙 / ☀️</button>
+  <img src="https://i.ibb.co/FbpgNfbZ/Screenshot-20250923-145058-edit-226003820134146.jpg" alt="Rehan Z4X">
+  <a href="https://instagram.com/rehan_z4x" target="_blank" class="insta">
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"> इंस्टाग्राम: @rehan_z4x
+  </a>
+</header>
 
-  <main>
-    <h2>वाहन जानकारी देखें</h2>
-    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px;">
-      <input type="text" id="rcInput" placeholder="वाहन नंबर डालें..." />
-      <button onclick="fetchVehicle()">खोजें</button>
+<main>
+  <h2>वाहन जानकारी देखें</h2>
+  <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px;">
+    <input type="text" id="rcInput" placeholder="वाहन नंबर डालें..." />
+    <button onclick="fetchVehicle()">खोजें</button>
+  </div>
+  <div id="result" class="result" style="display:none;"></div>
+</main>
+
+<div class="credit">© 2025 Rehan Z4X</div>
+
+<aside class="terminal" aria-label="Terminal window">
+  <div class="term-top">
+    <div class="circles">
+      <span class="c red"></span>
+      <span class="c yellow"></span>
+      <span class="c green"></span>
     </div>
+    <div style="margin-left:auto;font-size:12px;color:rgba(255,255,255,0.55)">STATUS • OK</div>
+  </div>
+  <div class="term-body" id="termBody" role="log" aria-live="polite">
+    <div class="typing" id="typingLine"></div>
+  </div>
+</aside>
 
-    <div id="result" class="result" style="display:none;"></div>
-  </main>
+<script>
+// Vehicle Fetch
+const API_URL="https://rehan-vehicle-rc-info.vercel.app/";
+async function fetchVehicle(){
+  const rc=document.getElementById("rcInput").value.trim();
+  const resultDiv=document.getElementById("result");
+  if(!rc){alert("कृपया वाहन नंबर डालें!");return;}
+  resultDiv.style.display="block";resultDiv.innerHTML="⏳ जानकारी लायी जा रही है...";
+  try{
+    const res=await fetch(`${API_URL}?rc_number=${rc}`);
+    const data=await res.json();
+    if(data.status!=="success"){resultDiv.innerHTML=`<p style='color:red;'>❌ ${data.message}</p>`;return;}
+    let html=`<strong style="color: var(--highlight-color); font-size:18px;">डेवलपर: rehan_z4x</strong><br><br>`;
+    for(const [key,value] of Object.entries(data.details)){if(value) html+=`<b>${key}:</b> ${value}<br>`;}
+    resultDiv.innerHTML=html+`<button class="copy-btn" onclick="copyInfo()">📋 जानकारी कॉपी करें</button>`;
+  }catch(e){resultDiv.innerHTML=`<p style='color:red;'>⚠️ जानकारी लाने में त्रुटि।</p>`;}
+}
+function copyInfo(){navigator.clipboard.writeText(document.getElementById("result").innerText);alert("✅ जानकारी कॉपी कर दी गई है!");}
+function toggleTheme(){document.body.classList.toggle("light");}
 
-  <div class="credit">© 2025 Rehan Z4X</div>
-
-  <script>
-    const API_URL = "https://rehan-vehicle-rc-info.vercel.app/";
-
-    async function fetchVehicle() {
-      const rc = document.getElementById("rcInput").value.trim();
-      const resultDiv = document.getElementById("result");
-
-      if (!rc) {
-        alert("कृपया वाहन नंबर डालें!");
-        return;
-      }
-
-      resultDiv.style.display = "block";
-      resultDiv.innerHTML = "⏳ जानकारी लायी जा रही है...";
-
-      try {
-        const res = await fetch(`${API_URL}?rc_number=${rc}`);
-        const data = await res.json();
-
-        if (data.status !== "success") {
-          resultDiv.innerHTML = `<p style='color:red;'>❌ ${data.message}</p>`;
-          return;
-        }
-
-        let html = `<strong style="color: var(--highlight-color); font-size:18px;">डेवलपर: rehan_z4x</strong><br><br>`;
-        for (const [key, value] of Object.entries(data.details)) {
-          if (value) html += `<b>${key}:</b> ${value}<br>`;
-        }
-
-        resultDiv.innerHTML = html + `<button class="copy-btn" onclick="copyInfo()">📋 जानकारी कॉपी करें</button>`;
-      } catch (e) {
-        resultDiv.innerHTML = `<p style='color:red;'>⚠️ जानकारी लाने में त्रुटि।</p>`;
-      }
+// MATRIX RAIN
+(function(){
+  const canvas=document.getElementById('matrix');const ctx=canvas.getContext('2d');
+  let W=innerWidth,H=innerHeight,dpr=Math.max(1,window.devicePixelRatio||1);
+  let columns=[],fontSize=16,running=true;
+  function init(){
+    W=innerWidth;H=innerHeight;canvas.width=W*dpr;canvas.height=H*dpr;
+    canvas.style.width=W+'px';canvas.style.height=H+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    fontSize=Math.max(12,Math.min(22,Math.floor(Math.min(W,H)/80)));
+    ctx.font=fontSize+"px monospace";
+    const colCount=Math.floor(W/fontSize);columns=new Array(colCount).fill(0).map(()=>Math.floor(Math.random()*H/fontSize));
+  }
+  function randomChar(){const pool="ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉ0123456789ABCDEF";return pool.charAt(Math.floor(Math.random()*pool.length));}
+  function step(){
+    if(!running)return;
+    const speedVar=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--matrix-speed'))||3;
+    ctx.fillStyle="rgba(0,0,0,0.12)";ctx.fillRect(0,0,W,H);
+    for(let i=0;i<columns.length;i++){
+      const x=i*fontSize,y=columns[i]*fontSize;
+      ctx.fillStyle="rgba(0,255,159,0.95)";ctx.fillText(randomChar(),x,y);
+      if(Math.random()>0.7){ctx.fillStyle="rgba(0,216,255,0.6)";ctx.fillText(randomChar(),x,y-fontSize*0.6);}
+      if(y>H+Math.random()*1000){columns[i]=0;}else{columns[i]+=Math.round((Math.random()*speedVar));}
     }
+    requestAnimationFrame(step);
+  }
+  window.addEventListener('resize',()=>{init();});
+  init();ctx.fillStyle="rgba(0,0,0,1)";ctx.fillRect(0,0,W,H);requestAnimationFrame(step);
+})();
 
-    function copyInfo() {
-      const text = document.getElementById("result").innerText;
-      navigator.clipboard.writeText(text);
-      alert("✅ जानकारी कॉपी कर दी गई है!");
-    }
+// Neon particles
+(function(){
+  const canvas=document.getElementById('particlesCanvas');const ctx=canvas.getContext('2d');
+  let particlesArray=[];const colors=['#ff3b3b','#ff8800','#ffffff','#ff00ff','#00ffff'];
+  canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+  const mouse={x:null,y:null};
+  window.addEventListener('mousemove',e=>{mouse.x=e.x;mouse.y=e.y;});
+  class Particle{constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*5+2;this.color=colors[Math.floor(Math.random()*colors.length)];this.speedX=Math.random()*1.5-0.75;this.speedY=Math.random()*1.5-0.75;}
+    draw(){ctx.shadowColor=this.color;ctx.shadowBlur=15;ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();}
+    update(){this.x+=this.speedX+(mouse.x-this.x)*0.0015;this.y+=this.speedY+(mouse.y-this.y)*0.0015;if(this.x<0||this.x>canvas.width)this.speedX*=-1;if(this.y<0||this.y>canvas.height)this.speedY*=-1;}
+  }
+  function initParticles(){particlesArray=[];for(let i=0;i<200;i++){particlesArray.push(new Particle());}}
+  initParticles();
+  function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);particlesArray.forEach(p=>{p.update();p.draw();});requestAnimationFrame(animate);}
+  animate();
+  window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;initParticles();});
+})();
 
-    function toggleTheme() {
-      document.body.classList.toggle("light");
-    }
-
-    // Neon Glow Interactive Particles
-    const canvas = document.getElementById('particlesCanvas');
-    const ctx = canvas.getContext('2d');
-    let particlesArray = [];
-    const colors = ['#ff3b3b', '#ff8800', '#ffffff', '#ff00ff', '#00ffff'];
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      initParticles();
-    });
-
-    const mouse = { x: null, y: null };
-    window.addEventListener('mousemove', e => {
-      mouse.x = e.x;
-      mouse.y = e.y;
-    });
-
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 5 + 2;
-        this.color = colors[Math.floor(Math.random() * colors.length)];
-        this.speedX = Math.random() * 1.5 - 0.75;
-        this.speedY = Math.random() * 1.5 - 0.75;
-      }
-
-      draw() {
-        ctx.shadowColor = this.color;
-        ctx.shadowBlur = 15;
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
-        ctx.fill();
-      }
-
-      update() {
-        this.x += this.speedX + (mouse.x - this.x) * 0.0015;
-        this.y += this.speedY + (mouse.y - this.y) * 0.0015;
-
-        if(this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-        if(this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-      }
-    }
-
-    function initParticles() {
-      particlesArray = [];
-      for(let i=0;i<200;i++){ // Increased particle density
-        particlesArray.push(new Particle());
-      }
-    }
-    initParticles();
-
-    function animate() {
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      particlesArray.forEach(p => {
-        p.update();
-        p.draw();
-      });
-      requestAnimationFrame(animate);
-    }
-    animate();
-  </script>
+// Terminal typing
+(function(){
+  const lines=[
+    "Initializing secure channel...",
+    "Handshake -> OK",
+    "Loading modules: [core crypt, netmgr, watchdog]",
+    "Proxy routes established.",
+    "Listening on 0.0.0.0:8080",
+    "Intel: packets/sec 1,342 • avg latency 12ms",
+    "Integrity check: 100% • signatures verified",
+    "User: Rehan Z4X • Privilege: root",
+    "All systems green. Monitoring active."
+  ];
+  const out=document.getElementById('typingLine');let li=0,ch=0,forward=true;
+  function tick(){
+    const text=lines[li];
+    if(ch<=text.length&&forward){out.textContent=text.slice(0,ch)+((Math.floor(Date.now()/300)%2)?"▌":"");ch++;setTimeout(tick,40+Math.random()*70);}
+    else{forward=false;setTimeout(()=>{out.textContent=text;setTimeout(()=>{li=(li+1)%lines.length;ch=0;forward=true;tick();appendLog(text);},700+Math.random()*800);},180);}
+  }
+  function appendLog(str){const body=document.getElementById('termBody');const p=document.createElement('div');p.textContent="> "+str;body.appendChild(p);body.scrollTop=body.scrollHeight;while(body.children.length>150)body.removeChild(body.firstChild);}
+  tick();
+})();
+</script>
 </body>
 </html>
