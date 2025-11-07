@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -6,80 +5,129 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>वाहन जानकारी - Rehan Z4X</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
 :root{
   --bg:#030305;
   --accent:#00ff9f;
-  --highlight:#ff8800;
-  --label-color:#00ffff;
-  --glass: rgba(0,0,0,0.35);
-  --card-glow:0 0 20px #00ff9f,0 0 40px #00ff9f;
   --text-color:#00ff9f;
+  --label-color:#00ffaa;
+  --glass: rgba(0,0,0,0.35);
   --font-main:'Poppins', monospace;
 }
 
-body{margin:0;padding:0;font-family:var(--font-main);background:var(--bg);color:var(--text-color);overflow-x:hidden;position:relative;transition:0.3s;}
-body.light {
-  --bg: #f4f4f4;
-  --text-color: #111111;
-  --accent: #ff3b3b;
-  --highlight: #ff8800;
-  --label-color:#ff4500;
-  --glass: rgba(255,255,255,0.15);
-  --card-glow:0 0 20px #ff3b3b,0 0 40px #ff3b3b;
+body{
+  margin:0;
+  padding:0;
+  font-family:var(--font-main);
+  background:var(--bg);
+  color:var(--text-color);
+  overflow-x:hidden;
+  position:relative;
 }
 
-body.light input, body.light .result, body.light button{
-  color: var(--text-color);
-  border-color: var(--accent);
-  box-shadow: var(--card-glow);
-  background: var(--glass);
+/* MATRIX CANVAS */
+#matrix{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:0;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;}
-#matrix,#particlesCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+/* HEADER */
+header{
+  padding:50px 20px 70px 20px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  position:relative;
+  z-index:2;
+  text-align:center;
+}
 
-header{padding:50px 20px 70px 20px;display:flex;flex-direction:column;align-items:center;position:relative;z-index:2;text-align:center;}
-header img{width:180px;height:180px;border-radius:50%;border:5px solid var(--accent);box-shadow:0 0 25px var(--accent);animation:pulseGlow 3s infinite alternate;}
-.insta{display:flex;align-items:center;gap:10px;margin-top:15px;font-weight:600;color:var(--text-color);text-decoration:none;font-size:20px;}
-.insta img{width:26px;height:26px;}
-.toggle{position:absolute;top:20px;right:20px;background:#ff3b3b;border:none;border-radius:25px;padding:10px 16px;color:#fff;cursor:pointer;font-weight:bold;font-size:16px;box-shadow:0 0 15px var(--accent);}
-.toggle:hover{opacity:0.85;}
+header img{
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  border:5px solid var(--accent);
+}
 
-main{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;padding:40px 20px;}
-h2{font-size:28px;margin-bottom:20px;color:var(--accent);text-shadow:0 0 10px var(--accent),0 0 20px var(--accent);animation:flicker 3s linear infinite;}
-input{padding:12px 15px;width:280px;border:2px solid #ff3b3b;border-radius:15px;font-size:16px;background:var(--glass);backdrop-filter:blur(8px);color:var(--text-color);outline:none;transition:0.3s;}
-input:focus{border-color:var(--highlight);box-shadow:0 0 12px var(--highlight);}
-button{padding:12px 18px;margin-left:10px;background:#ff3b3b;color:#fff;border:none;border-radius:12px;cursor:pointer;font-size:16px;transition:0.3s;box-shadow:var(--card-glow);}
-button:hover{opacity:0.85;transform:translateY(-2px);}
-.result{background:var(--glass);backdrop-filter:blur(12px);margin-top:30px;padding:25px;border-radius:20px;text-align:left;width:100%;max-width:700px;box-shadow:var(--card-glow);font-size:16px;line-height:1.8;transition:0.4s all;position:relative;z-index:2;white-space:pre-wrap;font-family:var(--font-main);overflow:hidden;}
-.result b{color:var(--label-color);text-shadow:0 0 5px var(--label-color);}
-.copy-btn{display:block;margin:20px auto 0;padding:10px 20px;background:#ff3b3b;border:none;color:#fff;border-radius:12px;cursor:pointer;font-size:16px;transition:0.3s;box-shadow:var(--card-glow);}
-.copy-btn:hover{opacity:0.85;transform:translateY(-2px);}
-.credit{text-align:center;font-size:14px;margin-top:30px;opacity:0.7;position:relative;z-index:2;}
+/* Text fields */
+input{
+  padding:12px 15px;
+  width:280px;
+  border:2px solid var(--accent);
+  border-radius:15px;
+  font-size:16px;
+  background:var(--glass);
+  color:var(--text-color);
+  outline:none;
+}
 
-@keyframes flicker{0%,19%,21%,23%,25%,54%,56%,100%{text-shadow:0 0 8px var(--accent),0 0 18px var(--accent);}20%,22%,24%,55%{text-shadow:none;}}
-@keyframes pulseGlow{0%{box-shadow:0 0 15px var(--accent),0 0 25px var(--accent);}50%{box-shadow:0 0 25px var(--accent),0 0 50px var(--accent);}100%{box-shadow:0 0 15px var(--accent),0 0 25px var(--accent);}}
+/* Buttons */
+button{
+  padding:12px 18px;
+  background:var(--accent);
+  color:#000;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:16px;
+  font-weight:bold;
+}
+
+/* Result Box */
+.result{
+  background:var(--glass);
+  margin-top:30px;
+  padding:25px;
+  border-radius:20px;
+  text-align:left;
+  width:100%;
+  max-width:700px;
+  font-size:16px;
+  line-height:1.8;
+  position:relative;
+  z-index:2;
+  white-space:pre-wrap;
+  overflow:hidden;
+}
+
+.result b{
+  color:var(--label-color);
+}
+
+.credit{
+  text-align:center;
+  font-size:14px;
+  margin-top:30px;
+  opacity:0.7;
+  z-index:2;
+}
 </style>
 </head>
+
 <body>
+
 <canvas id="matrix"></canvas>
-<canvas id="particlesCanvas"></canvas>
 
 <header>
-  <button class="toggle" onclick="toggleTheme()">🌙 / ☀️</button>
-  <img src="https://i.ibb.co/FbpgNfbZ/Screenshot-20250923-145058-edit-226003820134146.jpg" alt="Rehan Z4X">
-  <a href="https://instagram.com/rehan_z4x" target="_blank" class="insta">
-    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"> इंस्टाग्राम: @rehan_z4x
+  <img src="https://i.ibb.co/FbpgNfbZ/Screenshot-20250923-145058-edit-226003820134146.jpg" />
+  <a href="https://instagram.com/rehan_z4x" target="_blank" class="insta" style="color:var(--text-color);margin-top:15px;font-size:20px;font-weight:600;">
+    Instagram: @rehan_z4x
   </a>
 </header>
 
-<main>
-  <h2>🚗 वाहन जानकारी देखें</h2>
+<main style="position:relative;z-index:2;text-align:center;">
+  <h2 style="color:var(--accent); margin-bottom:20px;">🚗 वाहन जानकारी देखें</h2>
+
   <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px;">
     <input type="text" id="rcInput" placeholder="वाहन नंबर डालें..." />
     <button onclick="fetchVehicle()">🔍 खोजें</button>
   </div>
+
   <div id="result" class="result" style="display:none;"></div>
 </main>
 
@@ -99,22 +147,19 @@ async function fetchVehicle(){
   try{
     const res=await fetch(`${API_URL}?rc_number=${rc}`);
     const data=await res.json();
-    if(data.status!=="success"){resultDiv.innerHTML=`❌ ${data.message}`;return;}
+    if(data.status!=="success"){
+      resultDiv.innerHTML=`❌ ${data.message}`;
+      return;
+    }
 
     let fullText=`🔹 डेवलपर: rehan_z4x 🔹\n\n`;
+
     for(const [key,value] of Object.entries(data.details)){
       if(value) fullText+=`<b>${key}</b>: ${value}\n`;
     }
 
-    // Add emojis for fun
-    fullText = fullText.replace(/रजिस्ट्रेशन नंबर/i,"🆔 Registration No");
-    fullText = fullText.replace(/नाम/i,"👤 Name");
-    fullText = fullText.replace(/पता|Address/i,"🏠 Address");
-    fullText = fullText.replace(/शहर|City/i,"🌆 City");
-    fullText = fullText.replace(/मॉडल|Model/i,"🚙 Model");
-    fullText = fullText.replace(/साल|Year/i,"📅 Year");
+    resultDiv.innerHTML = fullText + '<button onclick="copyInfo()" style="margin-top:20px;padding:10px 20px;background:#00ff9f;border:none;border-radius:10px;font-weight:bold;">📋 कॉपी करें</button>';
 
-    resultDiv.innerHTML=fullText+'<button class="copy-btn" onclick="copyInfo()">📋 जानकारी कॉपी करें</button>';
   }catch(e){
     resultDiv.innerHTML=`⚠️ जानकारी लाने में त्रुटि।`;
   }
@@ -122,34 +167,50 @@ async function fetchVehicle(){
 
 function copyInfo(){
   navigator.clipboard.writeText(document.getElementById("result").innerText);
-  alert("✅ जानकारी कॉपी कर दी गई है!");
+  alert("✅ कॉपी हो गया!");
 }
 
-function toggleTheme(){document.body.classList.toggle("light");}
-
-// MATRIX RAIN
+/* MATRIX HACKER EFFECT */
 (function(){
-  const canvas=document.getElementById('matrix');const ctx=canvas.getContext('2d');
-  let W=innerWidth,H=innerHeight,dpr=Math.max(1,window.devicePixelRatio||1);
-  let columns=[],fontSize=16;
-  function init(){W=innerWidth;H=innerHeight;canvas.width=W*dpr;canvas.height=H*dpr;canvas.style.width=W+'px';canvas.style.height=H+'px';ctx.setTransform(dpr,0,0,dpr,0,0);fontSize=Math.max(12,Math.min(22,Math.floor(Math.min(W,H)/80)));ctx.font=fontSize+"px monospace";const colCount=Math.floor(W/fontSize);columns=new Array(colCount).fill(0).map(()=>Math.floor(Math.random()*H/fontSize));}
-  function randomChar(){const pool="ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉ0123456789ABCDEF";return pool.charAt(Math.floor(Math.random()*pool.length));}
-  function step(){ctx.fillStyle="rgba(0,0,0,0.12)";ctx.fillRect(0,0,W,H);for(let i=0;i<columns.length;i++){const x=i*fontSize,y=columns[i]*fontSize;ctx.fillStyle="rgba(0,255,159,0.95)";ctx.fillText(randomChar(),x,y);if(Math.random()>0.7){ctx.fillStyle="rgba(0,216,255,0.6)";ctx.fillText(randomChar(),x,y-fontSize*0.6);}if(y>H+Math.random()*1000){columns[i]=0;}else{columns[i]+=Math.round(Math.random()*3);}}requestAnimationFrame(step);}
-  window.addEventListener('resize',()=>{init();});init();requestAnimationFrame(step);
-})();
+  const canvas=document.getElementById('matrix');
+  const ctx=canvas.getContext('2d');
 
-// Neon particles
-(function(){
-  const canvas=document.getElementById('particlesCanvas');const ctx=canvas.getContext('2d');let particlesArray=[];const colors=['#ff3b3b','#ff8800','#ffffff','#ff00ff','#00ffff'];
-  canvas.width=window.innerWidth;canvas.height=window.innerHeight;
-  const mouse={x:null,y:null};window.addEventListener('mousemove',e=>{mouse.x=e.x;mouse.y=e.y;});
-  class Particle{constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*5+2;this.color=colors[Math.floor(Math.random()*colors.length)];this.speedX=Math.random()*1.5-0.75;this.speedY=Math.random()*1.5-0.75;}
-    draw(){ctx.shadowColor=this.color;ctx.shadowBlur=15;ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();}
-    update(){this.x+=this.speedX+(mouse.x-this.x)*0.0015;this.y+=this.speedY+(mouse.y-this.y)*0.0015;if(this.x<0||this.x>canvas.width)this.speedX*=-1;if(this.y<0||this.y>canvas.height)this.speedY*=-1;}}
-  function initParticles(){particlesArray=[];for(let i=0;i<200;i++){particlesArray.push(new Particle());}}initParticles();
-  function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);particlesArray.forEach(p=>{p.update();p.draw();});requestAnimationFrame(animate);}animate();
-  window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;initParticles();});
+  let W=innerWidth;
+  let H=innerHeight;
+
+  const fontSize=18;
+  const columns=Math.floor(W/fontSize);
+  let drops=[];
+
+  canvas.width=W;
+  canvas.height=H;
+
+  for(let x=0; x<columns; x++){
+    drops[x]=Math.random()*H;
+  }
+
+  function draw(){
+    ctx.fillStyle='rgba(0,0,0,0.05)';
+    ctx.fillRect(0,0,W,H);
+
+    ctx.fillStyle='#00ff9f';
+    ctx.font=fontSize+'px monospace';
+
+    for(let i=0; i<drops.length; i++){
+      const text = String.fromCharCode(0x30A0 + Math.random() * 96);
+      ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+
+      if(drops[i]*fontSize > H && Math.random()>0.975){
+        drops[i]=0;
+      }
+
+      drops[i]++;
+    }
+  }
+
+  setInterval(draw, 40);
 })();
 </script>
+
 </body>
 </html>
