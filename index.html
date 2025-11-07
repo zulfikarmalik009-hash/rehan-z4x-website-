@@ -8,7 +8,7 @@
 
 <style>
 :root{
-  --bg:#030305;
+  --bg:#000;
   --accent:#00ff9f;
   --text-color:#00ff9f;
   --label-color:#00ffaa;
@@ -26,8 +26,8 @@ body{
   position:relative;
 }
 
-/* MATRIX CANVAS */
-#matrix{
+/* BACKGROUND LAYERS */
+#matrix, #glitchNoise, #scanlines, #hexGrid{
   position:fixed;
   inset:0;
   width:100%;
@@ -35,6 +35,10 @@ body{
   pointer-events:none;
   z-index:0;
 }
+
+#glitchNoise{ opacity:0.17; }
+#scanlines{ opacity:0.12; }
+#hexGrid{ opacity:0.25; }
 
 /* HEADER */
 header{
@@ -51,10 +55,10 @@ header img{
   width:180px;
   height:180px;
   border-radius:50%;
-  border:5px solid var(--accent);
+  border:4px solid var(--accent);
 }
 
-/* Text fields */
+/* Inputs */
 input{
   padding:12px 15px;
   width:280px;
@@ -78,21 +82,20 @@ button{
   font-weight:bold;
 }
 
-/* Result Box */
+/* Result */
 .result{
   background:var(--glass);
   margin-top:30px;
   padding:25px;
   border-radius:20px;
-  text-align:left;
   width:100%;
   max-width:700px;
   font-size:16px;
   line-height:1.8;
+  color:var(--text-color);
   position:relative;
   z-index:2;
   white-space:pre-wrap;
-  overflow:hidden;
 }
 
 .result b{
@@ -111,12 +114,17 @@ button{
 
 <body>
 
+<!-- ✅ ALL HACKER BACKGROUND LAYERS -->
 <canvas id="matrix"></canvas>
+<canvas id="glitchNoise"></canvas>
+<canvas id="scanlines"></canvas>
+<canvas id="hexGrid"></canvas>
 
 <header>
-  <img src="https://i.ibb.co/FbpgNfbZ/Screenshot-20250923-145058-edit-226003820134146.jpg" />
-  <a href="https://instagram.com/rehan_z4x" target="_blank" class="insta" style="color:var(--text-color);margin-top:15px;font-size:20px;font-weight:600;">
-    Instagram: @rehan_z4x
+  <img src="https://i.ibb.co/FbpgNfbZ/Screenshot-20250923-145058-edit-226003820134146.jpg">
+  <a href="https://instagram.com/rehan_z4x" target="_blank" 
+     style="color:var(--text-color);margin-top:15px;font-size:20px;font-weight:600;">
+     Instagram: @rehan_z4x
   </a>
 </header>
 
@@ -134,6 +142,7 @@ button{
 <div class="credit">© 2025 Rehan Z4X</div>
 
 <script>
+/* ✅ VEHICLE API SYSTEM */
 const API_URL="https://rehan-vehicle-rc-info.vercel.app/";
 
 async function fetchVehicle(){
@@ -147,18 +156,21 @@ async function fetchVehicle(){
   try{
     const res=await fetch(`${API_URL}?rc_number=${rc}`);
     const data=await res.json();
+
     if(data.status!=="success"){
       resultDiv.innerHTML=`❌ ${data.message}`;
       return;
     }
 
-    let fullText=`🔹 डेवलपर: rehan_z4x 🔹\n\n`;
+    let fullText=`🔹 Developer: rehan_z4x 🔹\n\n`;
 
     for(const [key,value] of Object.entries(data.details)){
       if(value) fullText+=`<b>${key}</b>: ${value}\n`;
     }
 
-    resultDiv.innerHTML = fullText + '<button onclick="copyInfo()" style="margin-top:20px;padding:10px 20px;background:#00ff9f;border:none;border-radius:10px;font-weight:bold;">📋 कॉपी करें</button>';
+    resultDiv.innerHTML =
+      fullText +
+      '<button onclick="copyInfo()" style="margin-top:20px;padding:10px 20px;background:#00ff9f;border:none;border-radius:10px;font-weight:bold;">📋 कॉपी करें</button>';
 
   }catch(e){
     resultDiv.innerHTML=`⚠️ जानकारी लाने में त्रुटि।`;
@@ -170,24 +182,19 @@ function copyInfo(){
   alert("✅ कॉपी हो गया!");
 }
 
-/* MATRIX HACKER EFFECT */
+/* ✅ MATRIX RAIN */
 (function(){
   const canvas=document.getElementById('matrix');
   const ctx=canvas.getContext('2d');
 
-  let W=innerWidth;
-  let H=innerHeight;
-
+  let W=innerWidth, H=innerHeight;
   const fontSize=18;
   const columns=Math.floor(W/fontSize);
   let drops=[];
 
-  canvas.width=W;
-  canvas.height=H;
+  canvas.width=W; canvas.height=H;
 
-  for(let x=0; x<columns; x++){
-    drops[x]=Math.random()*H;
-  }
+  for(let x=0;x<columns;x++){ drops[x]=Math.random()*H; }
 
   function draw(){
     ctx.fillStyle='rgba(0,0,0,0.05)';
@@ -196,19 +203,130 @@ function copyInfo(){
     ctx.fillStyle='#00ff9f';
     ctx.font=fontSize+'px monospace';
 
-    for(let i=0; i<drops.length; i++){
-      const text = String.fromCharCode(0x30A0 + Math.random() * 96);
+    for(let i=0;i<drops.length;i++){
+      const text=String.fromCharCode(0x30A0 + Math.random()*96);
       ctx.fillText(text, i*fontSize, drops[i]*fontSize);
 
       if(drops[i]*fontSize > H && Math.random()>0.975){
         drops[i]=0;
       }
-
       drops[i]++;
     }
   }
 
   setInterval(draw, 40);
+})();
+
+/* ✅ GLITCH NOISE */
+(function(){
+  const canvas=document.getElementById("glitchNoise");
+  const ctx=canvas.getContext("2d");
+
+  function resize(){
+    canvas.width=innerWidth;
+    canvas.height=innerHeight;
+  }
+
+  resize();
+
+  function generateNoise(){
+    const W=canvas.width, H=canvas.height;
+    const imageData=ctx.createImageData(W,H);
+    const buffer=new Uint32Array(imageData.data.buffer);
+
+    for(let i=0;i<buffer.length;i++){
+      buffer[i]=(255<<24) | ((Math.random()*50)<<16) | ((Math.random()*255)<<8) | (Math.random()*50);
+    }
+
+    ctx.putImageData(imageData,0,0);
+  }
+
+  function animate(){
+    generateNoise();
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+  addEventListener("resize", resize);
+})();
+
+/* ✅ CRT SCANLINES */
+(function(){
+  const canvas=document.getElementById("scanlines");
+  const ctx=canvas.getContext("2d");
+
+  function resize(){
+    canvas.width=innerWidth;
+    canvas.height=innerHeight;
+  }
+
+  resize();
+
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="rgba(0,255,100,0.04)";
+
+    for(let y=0;y<canvas.height;y+=3){
+      ctx.fillRect(0,y,canvas.width,1);
+    }
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+  addEventListener("resize", resize);
+})();
+
+/* ✅ HEXAGONAL HACKER GRID */
+(function(){
+  const canvas=document.getElementById("hexGrid");
+  const ctx=canvas.getContext("2d");
+
+  function resize(){
+    canvas.width=innerWidth;
+    canvas.height=innerHeight;
+  }
+
+  resize();
+
+  const size=30;
+  const h=size*Math.sqrt(3)/2;
+
+  let tick=0;
+
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    for(let y=0; y<canvas.height+size; y+=h){
+      for(let x=0; x<canvas.width+size; x+=size*1.5){
+
+        const offset = (Math.floor(y/h) % 2) * (size*0.75);
+
+        let glow = Math.sin((x+y+tick)/40)*20 + 40;
+
+        ctx.strokeStyle = `rgba(0,255,120,${glow/150})`;
+        ctx.lineWidth = 1;
+
+        drawHex(x+offset, y);
+      }
+    }
+
+    tick++;
+    requestAnimationFrame(draw);
+  }
+
+  function drawHex(x,y){
+    const r=size/2;
+    ctx.beginPath();
+    for(let i=0;i<6;i++){
+      const angle=Math.PI/3*i;
+      ctx.lineTo(x + r*Math.cos(angle), y + r*Math.sin(angle));
+    }
+    ctx.closePath();
+    ctx.stroke();
+  }
+
+  draw();
+  addEventListener("resize", resize);
 })();
 </script>
 
