@@ -11,6 +11,7 @@
   --bg:#030305;
   --accent:#00ff9f;
   --highlight:#ff8800;
+  --label-color:#00ffff;
   --glass: rgba(0,0,0,0.35);
   --card-glow:0 0 20px #00ff9f,0 0 40px #00ff9f;
   --text-color:#00ff9f;
@@ -19,12 +20,13 @@
 
 body{margin:0;padding:0;font-family:var(--font-main);background:var(--bg);color:var(--text-color);overflow-x:hidden;position:relative;transition:0.3s;}
 body.light {
-  --bg: #ffffff;
+  --bg: #f4f4f4;
   --text-color: #111111;
   --accent: #ff3b3b;
   --highlight: #ff8800;
+  --label-color:#ff4500;
   --glass: rgba(255,255,255,0.15);
-  --card-glow: 0 0 20px #ff3b3b,0 0 40px #ff3b3b;
+  --card-glow:0 0 20px #ff3b3b,0 0 40px #ff3b3b;
 }
 
 body.light input, body.light .result, body.light button{
@@ -50,8 +52,8 @@ input{padding:12px 15px;width:280px;border:2px solid #ff3b3b;border-radius:15px;
 input:focus{border-color:var(--highlight);box-shadow:0 0 12px var(--highlight);}
 button{padding:12px 18px;margin-left:10px;background:#ff3b3b;color:#fff;border:none;border-radius:12px;cursor:pointer;font-size:16px;transition:0.3s;box-shadow:var(--card-glow);}
 button:hover{opacity:0.85;transform:translateY(-2px);}
-.result{background:var(--glass);backdrop-filter:blur(12px);margin-top:30px;padding:25px;border-radius:20px;text-align:left;width:100%;max-width:650px;box-shadow:var(--card-glow);font-size:16px;line-height:1.6;transition:0.4s all;position:relative;z-index:2;white-space:pre-wrap;font-family:var(--font-main);overflow:hidden;}
-.result b{color:var(--highlight);text-shadow:0 0 5px var(--highlight);}
+.result{background:var(--glass);backdrop-filter:blur(12px);margin-top:30px;padding:25px;border-radius:20px;text-align:left;width:100%;max-width:700px;box-shadow:var(--card-glow);font-size:16px;line-height:1.8;transition:0.4s all;position:relative;z-index:2;white-space:pre-wrap;font-family:var(--font-main);overflow:hidden;}
+.result b{color:var(--label-color);text-shadow:0 0 5px var(--label-color);}
 .copy-btn{display:block;margin:20px auto 0;padding:10px 20px;background:#ff3b3b;border:none;color:#fff;border-radius:12px;cursor:pointer;font-size:16px;transition:0.3s;box-shadow:var(--card-glow);}
 .copy-btn:hover{opacity:0.85;transform:translateY(-2px);}
 .credit{text-align:center;font-size:14px;margin-top:30px;opacity:0.7;position:relative;z-index:2;}
@@ -73,10 +75,10 @@ button:hover{opacity:0.85;transform:translateY(-2px);}
 </header>
 
 <main>
-  <h2>वाहन जानकारी देखें</h2>
+  <h2>🚗 वाहन जानकारी देखें</h2>
   <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px;">
     <input type="text" id="rcInput" placeholder="वाहन नंबर डालें..." />
-    <button onclick="fetchVehicle()">खोजें</button>
+    <button onclick="fetchVehicle()">🔍 खोजें</button>
   </div>
   <div id="result" class="result" style="display:none;"></div>
 </main>
@@ -92,7 +94,7 @@ async function fetchVehicle(){
   if(!rc){alert("कृपया वाहन नंबर डालें!");return;}
 
   resultDiv.style.display="block";
-  resultDiv.innerHTML="⏳ वाहन जानकारी लायी जा रही है...";
+  resultDiv.innerHTML="⏳ जानकारी लायी जा रही है...";
 
   try{
     const res=await fetch(`${API_URL}?rc_number=${rc}`);
@@ -101,8 +103,16 @@ async function fetchVehicle(){
 
     let fullText=`🔹 डेवलपर: rehan_z4x 🔹\n\n`;
     for(const [key,value] of Object.entries(data.details)){
-      if(value) fullText+=`${key}: ${value}\n`;
+      if(value) fullText+=`<b>${key}</b>: ${value}\n`;
     }
+
+    // Add emojis for fun
+    fullText = fullText.replace(/रजिस्ट्रेशन नंबर/i,"🆔 Registration No");
+    fullText = fullText.replace(/नाम/i,"👤 Name");
+    fullText = fullText.replace(/पता|Address/i,"🏠 Address");
+    fullText = fullText.replace(/शहर|City/i,"🌆 City");
+    fullText = fullText.replace(/मॉडल|Model/i,"🚙 Model");
+    fullText = fullText.replace(/साल|Year/i,"📅 Year");
 
     resultDiv.innerHTML=fullText+'<button class="copy-btn" onclick="copyInfo()">📋 जानकारी कॉपी करें</button>';
   }catch(e){
