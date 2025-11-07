@@ -25,14 +25,16 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;font-family:var(--font-sans);color:var(--text-color);}
-body{background:var(--bg);transition:0.4s all;}
+html,body{height:100%;overflow-x:hidden;font-family:var(--font-sans);color:var(--text-color);}
+body{background:var(--bg);transition:0.4s all;position:relative;}
 
-#matrix, canvas#particlesCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+/* Background layers */
+#matrix, #particlesCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
 
+/* Header */
 header{
   padding:50px 20px 70px 20px;
-  display:flex;flex-direction:column;align-items:center;position:relative;z-index:5;
+  display:flex;flex-direction:column;align-items:center;position:relative;z-index:2;
   text-align:center;
   animation: neonGlow 2.5s ease-in-out infinite alternate;
 }
@@ -48,8 +50,9 @@ header img{
 .toggle{position:absolute;top:20px;right:20px;background:var(--button-bg);border:none;border-radius:25px;padding:10px 16px;color:#fff;cursor:pointer;font-weight:bold;font-size:16px;box-shadow:0 0 20px var(--neon-header);transition:0.3s;}
 .toggle:hover{opacity:0.85;}
 
+/* Main */
 main{
-  position:relative;z-index:5;
+  position:relative;z-index:2;
   display:flex;flex-direction:column;align-items:center;padding:40px 20px;
 }
 
@@ -77,27 +80,13 @@ button:hover{opacity:0.85;transform:translateY(-2px);}
   background:rgba(0,0,0,0.6);margin-top:30px;padding:25px;border-radius:20px;text-align:left;width:100%;max-width:650px;
   box-shadow:0 0 20px var(--neon-card), 0 0 35px var(--neon-card);
   font-size:16px;line-height:1.6;transition:0.4s all;animation: neonCardPulse 3s infinite alternate;
+  position:relative;z-index:2;
 }
 .result b{color:var(--highlight-color);}
 .copy-btn{display:block;margin:20px auto 0;padding:10px 20px;background:var(--button-bg);border:none;color:#fff;border-radius:12px;cursor:pointer;font-size:16px;transition:0.3s;box-shadow:0 0 15px var(--neon-card);}
 .copy-btn:hover{opacity:0.85;transform:translateY(-2px);}
 
-.credit{text-align:center;font-size:14px;margin-top:30px;opacity:0.7;position:relative;z-index:5;}
-
-/* Terminal overlay */
-.terminal{
-  position:fixed;right:20px;bottom:20px;width:360px;background:rgba(0,0,0,0.55);border-radius:12px;padding:16px;
-  box-shadow:0 0 20px var(--neon-header),0 10px 40px rgba(0,0,0,0.55);
-  color:var(--accent);font-family:"Courier New", monospace;font-size:13px;z-index:5;
-}
-.term-top{display:flex;gap:8px;align-items:center;}
-.circles{display:flex;gap:8px;}
-.c{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.08);}
-.c.red{background:linear-gradient(180deg,#ff6b6b,#ff3b3b);}
-.c.yellow{background:linear-gradient(180deg,#ffd57a,#ffba00);}
-.c.green{background:linear-gradient(180deg,#7ef8a5,#2fd26b);}
-.term-body{overflow:auto;flex:1;padding-right:6px;}
-.typing{color:var(--accent);white-space:pre-wrap;line-height:1.5;}
+.credit{text-align:center;font-size:14px;margin-top:30px;opacity:0.7;position:relative;z-index:2;}
 
 /* Animations */
 @keyframes flicker{
@@ -144,20 +133,6 @@ button:hover{opacity:0.85;transform:translateY(-2px);}
 
 <div class="credit">© 2025 Rehan Z4X</div>
 
-<aside class="terminal" aria-label="Terminal window">
-  <div class="term-top">
-    <div class="circles">
-      <span class="c red"></span>
-      <span class="c yellow"></span>
-      <span class="c green"></span>
-    </div>
-    <div style="margin-left:auto;font-size:12px;color:rgba(255,255,255,0.55)">STATUS • OK</div>
-  </div>
-  <div class="term-body" id="termBody" role="log" aria-live="polite">
-    <div class="typing" id="typingLine"></div>
-  </div>
-</aside>
-
 <script>
 // Vehicle Fetch
 const API_URL="https://rehan-vehicle-rc-info.vercel.app/";
@@ -183,29 +158,10 @@ function toggleTheme(){document.body.classList.toggle("light");}
   const canvas=document.getElementById('matrix');const ctx=canvas.getContext('2d');
   let W=innerWidth,H=innerHeight,dpr=Math.max(1,window.devicePixelRatio||1);
   let columns=[],fontSize=16,running=true;
-  function init(){
-    W=innerWidth;H=innerHeight;canvas.width=W*dpr;canvas.height=H*dpr;
-    canvas.style.width=W+'px';canvas.style.height=H+'px';
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    fontSize=Math.max(12,Math.min(22,Math.floor(Math.min(W,H)/80)));
-    ctx.font=fontSize+"px monospace";
-    const colCount=Math.floor(W/fontSize);columns=new Array(colCount).fill(0).map(()=>Math.floor(Math.random()*H/fontSize));
-  }
+  function init(){W=innerWidth;H=innerHeight;canvas.width=W*dpr;canvas.height=H*dpr;canvas.style.width=W+'px';canvas.style.height=H+'px';ctx.setTransform(dpr,0,0,dpr,0,0);fontSize=Math.max(12,Math.min(22,Math.floor(Math.min(W,H)/80)));ctx.font=fontSize+"px monospace";const colCount=Math.floor(W/fontSize);columns=new Array(colCount).fill(0).map(()=>Math.floor(Math.random()*H/fontSize));}
   function randomChar(){const pool="ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉ0123456789ABCDEF";return pool.charAt(Math.floor(Math.random()*pool.length));}
-  function step(){
-    if(!running)return;
-    const speedVar=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--matrix-speed'))||3;
-    ctx.fillStyle="rgba(0,0,0,0.12)";ctx.fillRect(0,0,W,H);
-    for(let i=0;i<columns.length;i++){
-      const x=i*fontSize,y=columns[i]*fontSize;
-      ctx.fillStyle="rgba(0,255,159,0.95)";ctx.fillText(randomChar(),x,y);
-      if(Math.random()>0.7){ctx.fillStyle="rgba(0,216,255,0.6)";ctx.fillText(randomChar(),x,y-fontSize*0.6);}
-      if(y>H+Math.random()*1000){columns[i]=0;}else{columns[i]+=Math.round((Math.random()*speedVar));}
-    }
-    requestAnimationFrame(step);
-  }
-  window.addEventListener('resize',()=>{init();});
-  init();ctx.fillStyle="rgba(0,0,0,1)";ctx.fillRect(0,0,W,H);requestAnimationFrame(step);
+  function step(){if(!running)return;const speedVar=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--matrix-speed'))||3;ctx.fillStyle="rgba(0,0,0,0.12)";ctx.fillRect(0,0,W,H);for(let i=0;i<columns.length;i++){const x=i*fontSize,y=columns[i]*fontSize;ctx.fillStyle="rgba(0,255,159,0.95)";ctx.fillText(randomChar(),x,y);if(Math.random()>0.7){ctx.fillStyle="rgba(0,216,255,0.6)";ctx.fillText(randomChar(),x,y-fontSize*0.6);}if(y>H+Math.random()*1000){columns[i]=0;}else{columns[i]+=Math.round((Math.random()*speedVar));}}requestAnimationFrame(step);}
+  window.addEventListener('resize',()=>{init();});init();ctx.fillStyle="rgba(0,0,0,1)";ctx.fillRect(0,0,W,H);requestAnimationFrame(step);
 })();
 
 // Neon particles
@@ -224,29 +180,6 @@ function toggleTheme(){document.body.classList.toggle("light");}
   function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);particlesArray.forEach(p=>{p.update();p.draw();});requestAnimationFrame(animate);}
   animate();
   window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;initParticles();});
-})();
-
-// Terminal typing
-(function(){
-  const lines=[
-    "Initializing secure channel...",
-    "Handshake -> OK",
-    "Loading modules: [core crypt, netmgr, watchdog]",
-    "Proxy routes established.",
-    "Listening on 0.0.0.0:8080",
-    "Intel: packets/sec 1,342 • avg latency 12ms",
-    "Integrity check: 100% • signatures verified",
-    "User: Rehan Z4X • Privilege: root",
-    "All systems green. Monitoring active."
-  ];
-  const out=document.getElementById('typingLine');let li=0,ch=0,forward=true;
-  function tick(){
-    const text=lines[li];
-    if(ch<=text.length&&forward){out.textContent=text.slice(0,ch)+((Math.floor(Date.now()/300)%2)?"▌":"");ch++;setTimeout(tick,40+Math.random()*70);}
-    else{forward=false;setTimeout(()=>{out.textContent=text;setTimeout(()=>{li=(li+1)%lines.length;ch=0;forward=true;tick();appendLog(text);},700+Math.random()*800);},180);}
-  }
-  function appendLog(str){const body=document.getElementById('termBody');const p=document.createElement('div');p.textContent="> "+str;body.appendChild(p);body.scrollTop=body.scrollHeight;while(body.children.length>150)body.removeChild(body.firstChild);}
-  tick();
 })();
 </script>
 </body>
